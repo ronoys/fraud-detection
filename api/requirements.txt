@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic
+scikit-learn
+xgboost
+joblib
+boto3
+prometheus-fastapi-instrumentator
+python-dotenv
