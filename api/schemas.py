@@ -55,3 +55,10 @@ class PredictionResponse(BaseModel):
     confidence: float = Field(..., ge=0.0, le=1.0, description="Model confidence score (fraud probability)")
     transaction_id: str = Field(..., description="UUID assigned to this prediction request")
     timestamp: str = Field(..., description="ISO 8601 UTC timestamp of when the prediction was made")
+
+
+class AlertEvent(BaseModel):
+    transaction_id: str
+    amount: float
+    confidence: float
+    timestamp: str

@@ -9,9 +9,24 @@ services:
       - "8000:8000"
     env_file:
       - ../.env
+    environment:
+      - MODEL_PATH=model/artifacts/xgboost.joblib
+      - SCALER_PATH=model/artifacts/scaler.joblib
     volumes:
       - ../model/artifacts:/app/model/artifacts:ro
     depends_on: []
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: infra/frontend.Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      - api
     restart: unless-stopped
 
   prometheus:

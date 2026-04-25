@@ -1,6 +1,6 @@
 {
   "best_model_name": "random_forest",
-  "training_timestamp": "2026-04-22T21:05:13.700406+00:00",
+  "training_timestamp": "2026-04-22T21:40:07.681196+00:00",
   "dataset_shape": [
     284807,
     31
@@ -22,7 +22,7 @@
         "fn": 8,
         "tp": 90
       },
-      "training_time_seconds": 3.69
+      "training_time_seconds": 1.74
     },
     "knn": {
       "roc_auc": 0.9485,
@@ -36,7 +36,7 @@
         "fn": 12,
         "tp": 86
       },
-      "training_time_seconds": 0.09
+      "training_time_seconds": 0.04
     },
     "random_forest": {
       "roc_auc": 0.9682,
@@ -50,7 +50,7 @@
         "fn": 17,
         "tp": 81
       },
-      "training_time_seconds": 106.31
+      "training_time_seconds": 46.31
     },
     "xgboost": {
       "roc_auc": 0.97,
@@ -64,7 +64,7 @@
         "fn": 12,
         "tp": 86
       },
-      "training_time_seconds": 3.18
+      "training_time_seconds": 1.36
     }
   }
 }

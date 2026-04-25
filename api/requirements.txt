@@ -1,9 +1,10 @@
 fastapi
 uvicorn[standard]
 pydantic
-scikit-learn
+pandas==1.4.3
+numpy==1.23.0
+scikit-learn==1.1.2
 xgboost
-joblib
-boto3
+joblib==1.5.3
 prometheus-fastapi-instrumentator
 python-dotenv

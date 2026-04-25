@@ -1,20 +1,14 @@
 FROM python:3.9-slim
 
-# Create non-root user
 RUN groupadd --gid 1001 appgroup && \
     useradd --uid 1001 --gid appgroup --shell /bin/bash --create-home appuser
 
 WORKDIR /app
 
-# Install dependencies before copying source (better layer caching)
 COPY api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application source
 COPY api/ .
-
-# Include model artifacts for cloud deployments. Docker Compose still mounts the
-# local artifacts directory over this path for development.
 RUN mkdir -p model/artifacts
 COPY model/artifacts/xgboost.joblib model/artifacts/xgboost.joblib
 COPY model/artifacts/scaler.joblib model/artifacts/scaler.joblib
