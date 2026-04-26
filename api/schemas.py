@@ -50,11 +50,23 @@ class TransactionRequest(BaseModel):
     }
 
 
+class PipelineStep(BaseModel):
+    name: str
+    detail: str
+
+
 class PredictionResponse(BaseModel):
     fraud: bool = Field(..., description="True if the transaction is predicted as fraudulent")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Model confidence score (fraud probability)")
     transaction_id: str = Field(..., description="UUID assigned to this prediction request")
     timestamp: str = Field(..., description="ISO 8601 UTC timestamp of when the prediction was made")
+    pipeline_steps: list[PipelineStep] = Field(default_factory=list)
+
+
+class NotifyRequest(BaseModel):
+    amount: float
+    timestamp: str
+    transaction_id: str
 
 
 class AlertEvent(BaseModel):

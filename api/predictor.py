@@ -38,15 +38,12 @@ def load_model() -> None:
     logger.info("Model warmup complete")
 
 
-def predict(features: dict) -> tuple[bool, float]:
+def predict(features: dict) -> tuple[bool, float, float]:
     """
     Run inference on a single transaction.
 
-    Args:
-        features: dict mapping feature names to float values.
-
     Returns:
-        (is_fraud, confidence) where confidence is the fraud class probability.
+        (is_fraud, confidence, scaled_amount)
     """
     if _model is None or _scaler is None:
         raise RuntimeError("Model has not been loaded. Call load_model() first.")
@@ -58,4 +55,4 @@ def predict(features: dict) -> tuple[bool, float]:
     fraud_prob: float = float(_model.predict_proba(X)[0][1])
     threshold = float(os.getenv("FRAUD_THRESHOLD", "0.5"))
     is_fraud = fraud_prob >= threshold
-    return is_fraud, fraud_prob
+    return is_fraud, fraud_prob, scaled_amount

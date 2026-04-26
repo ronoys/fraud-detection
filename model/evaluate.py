@@ -47,9 +47,9 @@ EVAL_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def load_artifacts():
-    model = joblib.load(ARTIFACTS_DIR / "best_model.joblib")
+    model = joblib.load(ARTIFACTS_DIR / "xgboost.joblib")
     scaler = joblib.load(ARTIFACTS_DIR / "scaler.joblib")
-    logger.info("Loaded best_model.joblib and scaler.joblib")
+    logger.info("Loaded xgboost.joblib and scaler.joblib")
     return model, scaler
 
 
@@ -165,6 +165,22 @@ def threshold_analysis(y_test, y_prob) -> None:
         )
 
 
+def print_fraud_examples(X_test: pd.DataFrame, y_test: pd.Series, y_pred, y_prob) -> None:
+    """Print correctly-classified fraud rows so their V values can be used in the UI."""
+    fraud_idx = (y_test == 1) & (y_pred == 1)
+    hits = X_test[fraud_idx].copy()
+    hits["fraud_prob"] = y_prob[fraud_idx]
+    hits = hits.sort_values("fraud_prob", ascending=False).head(3)
+
+    print("\n=== Correctly-classified fraud examples (use these V values in the UI) ===")
+    v_cols = [f"V{i}" for i in range(1, 29)]
+    for rank, (_, row) in enumerate(hits.iterrows(), 1):
+        print(f"\n--- Example {rank}  (fraud_prob={row['fraud_prob']:.4f}) ---")
+        for col in v_cols:
+            print(f"  {col}: {row[col]:.4f}")
+        print(f"  Amount (scaled): {row['Amount']:.4f}")
+
+
 def main():
     model, scaler = load_artifacts()
     X_test, y_test = load_test_data(scaler)
@@ -187,6 +203,7 @@ def main():
     print(f"PR-AUC  : {average_precision_score(y_test, y_prob):.4f}")
 
     threshold_analysis(y_test, y_prob)
+    print_fraud_examples(X_test, y_test, y_pred, y_prob)
 
     print(f"\nAll outputs saved to {EVAL_DIR}")
 
